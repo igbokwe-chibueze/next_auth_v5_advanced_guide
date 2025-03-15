@@ -12,7 +12,7 @@ const font = Poppins ({
 export default function Home() {
   return (
     <main className=" flex min-h-screen flex-col items-center justify-center 
-      bg-gradient-to-t from-sky-400 to-blue-800"
+      bg-radial-[at_50%_10%] from-sky-200 via-blue-400 to-indigo-900 to-90%"
     >
       <div className="space-y-6 text-center">
         <h1 className={cn(

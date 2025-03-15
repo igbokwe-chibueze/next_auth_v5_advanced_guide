@@ -22,7 +22,7 @@ const LoginButton = ({ children, mode = "redirect", asChild }: LoginButtonProps)
         )
     }
   return (
-    <span onClick={onClick} className="cursor-pointer">
+    <span onClick={onClick}>
         {children}
     </span>
   )
