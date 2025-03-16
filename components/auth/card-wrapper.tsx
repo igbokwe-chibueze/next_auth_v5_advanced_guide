@@ -30,7 +30,7 @@ export const CardWrapper = ({ children, headerLabel, backButtonLabel, backButton
                         <Social/>
                     </CardFooter>
                 )}
-                <CardFooter>
+                <CardFooter className=" flex justify-center">
                     <BackButton
                         label={backButtonLabel}
                         href={backButtonHref}

@@ -6,14 +6,14 @@ const Socials = () => {
     return (
         <div className="flex items-center w-full gap-x-2">
             <Button size={"lg"} variant={"outline"} 
-                className="flex-1"
+                className="flex-1 buttons"
                 onClick={() => {}}
             >
                 <FcGoogle className="h-5 w-5" />
             </Button>
 
             <Button size={"lg"} variant={"outline"} 
-                className="flex-1"
+                className="flex-1 buttons"
                 onClick={() => {}}
             >
                 <FaGithub className="h-5 w-5" />

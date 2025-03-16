@@ -26,7 +26,7 @@ export default function Home() {
         </p>
         <div>
           <LoginButton>
-            <Button variant={"secondary"} size={"lg"}>
+            <Button variant={"secondary"} size={"lg"} className="buttons">
               Sign In
             </Button>
           </LoginButton>
