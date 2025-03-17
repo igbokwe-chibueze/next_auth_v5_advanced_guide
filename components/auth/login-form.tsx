@@ -10,11 +10,17 @@ import { LoginSchema } from "@/schemas"
 import { Button } from "@/components/ui/button"
 import { FormError } from "@/components/form-error"
 import { FormSuccess } from "@/components/form-success"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Eye, EyeOff } from "lucide-react"
+import { login } from "@/actions/login"
+
 
 export const LoginForm = () => {
-    const [showPassword, setShowPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(false);
+    const [isPending, startTransition] = useTransition();
+
+    const [error, setError] = useState<string | undefined>("");
+    const [success, setSuccess] = useState<string | undefined>("");
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
@@ -25,7 +31,19 @@ export const LoginForm = () => {
     })
 
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-        console.log(values)
+        setError("");
+        setSuccess("");
+
+        startTransition(() => {
+            login(values)
+                .then((res) => {
+                    setError(res.error);
+                    setSuccess(res.success);
+                })
+                .catch((err) => {
+                    setError(err.message);
+                })
+        });
     }
 
 
@@ -56,6 +74,7 @@ export const LoginForm = () => {
                                             placeholder="Enter your email"
                                             type="email"
                                             autoComplete="email"
+                                            disabled={isPending}
                                         />
                                     </FormControl>
                                     <FormMessage/>
@@ -78,6 +97,7 @@ export const LoginForm = () => {
                                                 //type="password"
                                                 type={showPassword ? "text" : "password"}
                                                 autoComplete="current-password"
+                                                disabled={isPending}
                                             />
                                         </FormControl>
 
@@ -101,15 +121,23 @@ export const LoginForm = () => {
                         />
                     </div>
 
-                    <FormError message=""/>
-                    <FormSuccess message=""/>
+                    <FormError message={error}/>
+                    <FormSuccess message={success}/>
 
                     {/* Submit Button */}
                     <Button
                         type="submit"
                         className="w-full buttons"
+                        disabled={isPending}
                     >
-                        Login
+                        {isPending ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <span className="h-4 w-4 border-2 border-t-transparent border-solid rounded-full animate-spin" />
+                                <span>Logging in</span>
+                            </div>
+                        ) : (
+                            "Login"
+                        )}
                     </Button>
                 </form>
             </Form>
