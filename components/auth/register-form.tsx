@@ -60,139 +60,139 @@ export const RegisterForm = () => {
             backButtonHref="/auth/login"
             showSocial
         >
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="space-y-4">
-                    {/* Name */}
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        placeholder="Enter your name"
-                                        type="text"
-                                        autoComplete="name"
-                                        disabled={isPending}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* Email */}
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        placeholder="Enter your email"
-                                        type="email"
-                                        autoComplete="email"
-                                        disabled={isPending}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* Password */}
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <div className="relative">
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <div className="space-y-4">
+                        {/* Name */}
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input
                                             {...field}
-                                            placeholder="Enter your password"
-                                            type={showPassword ? "text" : "password"}
-                                            autoComplete="new-password"
+                                            placeholder="Enter your name"
+                                            type="text"
+                                            autoComplete="name"
                                             disabled={isPending}
                                         />
                                     </FormControl>
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() => setShowPassword((prev) => !prev)}
-                                        className="absolute inset-y-0 right-0 flex items-center text-gray-400"
-                                    >
-                                        {showPassword ? (
-                                            <EyeOff className="h-4 w-4" />
-                                        ) : (
-                                            <Eye className="h-4 w-4" />
-                                        )}
-                                    </Button>
-                                </div>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-                    {/* Confirm Password */}
-                    <FormField
-                        control={form.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Confirm Password</FormLabel>
-                                <div className="relative">
+                        {/* Email */}
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
                                     <FormControl>
                                         <Input
                                             {...field}
-                                            placeholder="Confirm your password"
-                                            type={showPassword ? "text" : "password"}
-                                            autoComplete="new-password"
+                                            placeholder="Enter your email"
+                                            type="email"
+                                            autoComplete="email"
                                             disabled={isPending}
                                         />
                                     </FormControl>
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() => setShowPassword((prev) => !prev)}
-                                        className="absolute inset-y-0 right-0 flex items-center text-gray-400"
-                                    >
-                                        {showPassword ? (
-                                            <EyeOff className="h-4 w-4" />
-                                        ) : (
-                                            <Eye className="h-4 w-4" />
-                                        )}
-                                    </Button>
-                                </div>
-                                <FormMessage />
-                            </FormItem>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        {/* Password */}
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <div className="relative">
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                placeholder="Enter your password"
+                                                type={showPassword ? "text" : "password"}
+                                                autoComplete="new-password"
+                                                disabled={isPending}
+                                            />
+                                        </FormControl>
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => setShowPassword((prev) => !prev)}
+                                            className="absolute inset-y-0 right-0 flex items-center text-gray-400"
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-4 w-4" />
+                                            ) : (
+                                                <Eye className="h-4 w-4" />
+                                            )}
+                                        </Button>
+                                    </div>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        {/* Confirm Password */}
+                        <FormField
+                            control={form.control}
+                            name="confirmPassword"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Confirm Password</FormLabel>
+                                    <div className="relative">
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                placeholder="Confirm your password"
+                                                type={showPassword ? "text" : "password"}
+                                                autoComplete="new-password"
+                                                disabled={isPending}
+                                            />
+                                        </FormControl>
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => setShowPassword((prev) => !prev)}
+                                            className="absolute inset-y-0 right-0 flex items-center text-gray-400"
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-4 w-4" />
+                                            ) : (
+                                                <Eye className="h-4 w-4" />
+                                            )}
+                                        </Button>
+                                    </div>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    <FormError message={error} />
+                    <FormSuccess message={success} />
+
+                    <Button type="submit" className="w-full buttons" disabled={isPending}>
+                        {isPending ? (
+                            <div className="flex items-center justify-center gap-2">
+                                <span className="h-4 w-4 border-2 border-t-transparent border-solid rounded-full animate-spin" />
+                                <span>Registering</span>
+                            </div>
+                        ) : (
+                            "Register"
                         )}
-                    />
-                </div>
-
-                <FormError message={error} />
-                <FormSuccess message={success} />
-
-                <Button type="submit" className="w-full buttons" disabled={isPending}>
-                    {isPending ? (
-                        <div className="flex items-center justify-center gap-2">
-                            <span className="h-4 w-4 border-2 border-t-transparent border-solid rounded-full animate-spin" />
-                            <span>Registering</span>
-                        </div>
-                    ) : (
-                        "Register"
-                    )}
-                </Button>
-            </form>
-        </Form>
+                    </Button>
+                </form>
+            </Form>
         </CardWrapper>
     );
 };
