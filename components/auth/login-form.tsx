@@ -1,21 +1,31 @@
 "use client"
 
-import { CardWrapper } from "@/components/auth/card-wrapper"
 import{ useForm } from "react-hook-form"
+import { useState, useTransition } from "react"
+import { useSearchParams } from "next/navigation"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+
+import { CardWrapper } from "@/components/auth/card-wrapper"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { LoginSchema } from "@/schemas"
 import { Button } from "@/components/ui/button"
+
+import { LoginSchema } from "@/schemas"
 import { FormError } from "@/components/form-error"
 import { FormSuccess } from "@/components/form-success"
-import { useState, useTransition } from "react"
+
 import { Eye, EyeOff } from "lucide-react"
 import { login } from "@/actions/login"
 
 
 export const LoginForm = () => {
+    const searchParams = useSearchParams();
+    const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
+        ? "Email already in use with different provider"
+        : ""
+    
     const [showPassword, setShowPassword] = useState(false);
     const [isPending, startTransition] = useTransition();
 
@@ -38,10 +48,8 @@ export const LoginForm = () => {
             login(values)
                 .then((res) => {
                     setError(res?.error);
+                    // TODO: ADD When we add 2FA
                     //setSuccess(res?.success);
-                    if (!res?.error) {
-                        setSuccess("Logged in successfully!");
-                    }
                 })
                 .catch((err) => {
                     setError(err.message);
@@ -124,7 +132,7 @@ export const LoginForm = () => {
                         />
                     </div>
 
-                    <FormError message={error}/>
+                    <FormError message={error || urlError}/>
                     <FormSuccess message={success}/>
 
                     {/* Submit Button */}
