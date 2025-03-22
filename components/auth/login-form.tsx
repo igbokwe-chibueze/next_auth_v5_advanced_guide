@@ -49,7 +49,7 @@ export const LoginForm = () => {
                 .then((res) => {
                     setError(res?.error);
                     // TODO: ADD When we add 2FA
-                    //setSuccess(res?.success);
+                    setSuccess(res?.success);
                 })
                 .catch((err) => {
                     setError(err.message);
