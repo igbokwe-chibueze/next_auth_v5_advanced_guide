@@ -4,11 +4,12 @@ import { getVerificationTokenByToken } from "@/data/verification-token";
 import { prisma } from "@/lib/prisma";
 import { getUserByEmail } from "@/data/user";
 
+// A better naming condition would have been to call this verifyEmail or emailVerification
 export const newVerification = async (token: string) => {
     const existingToken = await getVerificationTokenByToken(token);
 
     if (!existingToken) {
-        return { error: "Invalid credentials*5!" };
+        return { error: "Invalid credentials!*no token" };
     }
 
     const hasExpired = new Date(existingToken.expires) < new Date();

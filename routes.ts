@@ -5,7 +5,7 @@
  */
 export const publicRoutes = [
     "/",
-    "/auth/new-verification"
+    "/auth/new-verification" // A better naming condition would have been to call this verify-email or email-verification
 ];
 
 /**
@@ -17,6 +17,8 @@ export const authRoutes = [
     "/auth/login",
     "/auth/register",
     "/auth/error",
+    "/auth/reset-password",
+    "/auth/new-password",
 ];
 
 /**

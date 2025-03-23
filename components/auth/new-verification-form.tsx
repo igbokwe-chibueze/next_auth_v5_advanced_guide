@@ -20,7 +20,7 @@ export const NewVerificationForm = () => {
         if (success || error) return;       
 
         if (!token) {
-            setError("Invalid credentials*4!");
+            setError("Invalid credentials*4of5!");
             return;
         }
         

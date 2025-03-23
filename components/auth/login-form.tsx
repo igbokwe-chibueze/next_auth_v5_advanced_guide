@@ -18,6 +18,7 @@ import { FormSuccess } from "@/components/form-success"
 
 import { Eye, EyeOff } from "lucide-react"
 import { login } from "@/actions/login"
+import Link from "next/link"
 
 
 export const LoginForm = () => {
@@ -105,7 +106,6 @@ export const LoginForm = () => {
                                             <Input 
                                                 {...field}
                                                 placeholder="******"
-                                                //type="password"
                                                 type={showPassword ? "text" : "password"}
                                                 autoComplete="current-password"
                                                 disabled={isPending}
@@ -126,6 +126,17 @@ export const LoginForm = () => {
                                             )}
                                         </Button>
                                     </div>
+
+                                    <Button
+                                        variant="link"
+                                        size="sm"
+                                        asChild
+                                        className="px-0 flex justify-start font-normal"
+                                    >
+                                        <Link href="/auth/reset-password">
+                                            Forgot Password?
+                                        </Link>
+                                    </Button>
                                     <FormMessage/>
                                 </FormItem>
                             )}

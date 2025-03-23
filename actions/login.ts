@@ -22,13 +22,13 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     const existingUser = await getUserByEmail(email);
 
     if (!existingUser || !existingUser.email || !existingUser.password) {
-        return { error: "Invalid credentials*1!" };
+        return { error: "Invalid credentials!" };
     }
 
     // Compare the provided password with the stored hash.
     const passwordMatches = await bcrypt.compare(password, existingUser.password);
     if (!passwordMatches) {
-        return { error: "Invalid credentials*2!" };
+        return { error: "Invalid credentials*wrong password!" };
     }
 
     // Only send verification email if the credentials are valid but email is unverified.
@@ -50,7 +50,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         if (error instanceof AuthError) {
             switch (error.type) {
                 case "CredentialsSignin":
-                    return { error: "Invalid credentials*3!" };
+                    return { error: "Invalid credentials!" };
                     
                 default:
                     return { error: "Something went wrong!" };
