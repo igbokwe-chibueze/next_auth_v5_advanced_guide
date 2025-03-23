@@ -8,7 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
 import { CardWrapper } from "@/components/auth/card-wrapper"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form"
+import { InputOTP, InputOTPGroup, InputOTPSlot,  } from "@/components/ui/input-otp"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
@@ -19,6 +20,7 @@ import { FormSuccess } from "@/components/form-success"
 import { Eye, EyeOff } from "lucide-react"
 import { login } from "@/actions/login"
 import Link from "next/link"
+import { CountdownTimer } from "./countdown-timer"
 
 
 export const LoginForm = () => {
@@ -30,6 +32,7 @@ export const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isPending, startTransition] = useTransition();
 
+    const [showTwoFactor, setShowTwoFactor] = useState(false);
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
 
@@ -38,6 +41,7 @@ export const LoginForm = () => {
         defaultValues: {
             email: "",
             password: "",
+            code: "",
         },
     })
 
@@ -48,15 +52,48 @@ export const LoginForm = () => {
         startTransition(() => {
             login(values)
                 .then((res) => {
-                    setError(res?.error);
-                    // TODO: ADD When we add 2FA
-                    setSuccess(res?.success);
+                    if (res?.error) {
+                        if (res.error === "Code has expired!") {
+                          // Code expired: reset view to email/password inputs
+                          setShowTwoFactor(false);
+                          form.reset(); // Reset all fields for a fresh start
+                        } else if (res.error.includes("Invalid code")) {
+                          // For invalid code errors (mismatch or token missing): clear only the code field
+                          form.setValue("code", "");
+                        } else {
+                          // Handle other errors by resetting the two-factor mode
+                          setShowTwoFactor(false);
+                          form.reset();
+                        }
+                        setError(res.error);
+                    }
+
+                    if (res?.success) {
+                        form.reset();
+                        setSuccess(res.success);
+                    }
+
+                    if (res?.twoFactor) {
+                        setShowTwoFactor(true);
+                    }
                 })
                 .catch((err) => {
+                    // If the error is a redirect, do nothing or handle it as necessary.
+                    if (err.message === "NEXT_REDIRECT") {
+                        return;
+                    }
                     setError(err.message);
                 })
         });
     }
+
+    // Function to call when the timer expires
+    const handleExpire = () => {
+        // Mimic the logic when the token has expired
+        setShowTwoFactor(false);
+        form.reset(); // reset the fields
+        setError("Code has expired!");
+    };
 
 
     return (
@@ -64,7 +101,8 @@ export const LoginForm = () => {
             headerLabel="Welcome Back"
             backButtonLabel="Don't have an account?"
             backButtonHref="/auth/register"
-            showSocial
+            // Only show socials when not in 2FA mode
+            showSocial={!showTwoFactor}
         >
             <Form {...form}>
                 <form 
@@ -73,80 +111,115 @@ export const LoginForm = () => {
                 >
                     {/* Form Fields */}
                     <div className="space-y-4">
-                        {/* Email */}
-                        <FormField 
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input 
-                                            {...field}
-                                            placeholder="Enter your email"
-                                            type="email"
-                                            autoComplete="email"
-                                            disabled={isPending}
-                                        />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
+                        {showTwoFactor && (
+                            <>
+                                <FormField
+                                    control={form.control}
+                                    name="code"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Two Factor Code</FormLabel>
+                                            <FormControl>
+                                                <InputOTP maxLength={6} {...field}>
+                                                    <InputOTPGroup>
+                                                        <InputOTPSlot index={0} />
+                                                        <InputOTPSlot index={1} />
+                                                        <InputOTPSlot index={2} />
+                                                        <InputOTPSlot index={3} />
+                                                        <InputOTPSlot index={4} />
+                                                        <InputOTPSlot index={5} />
+                                                    </InputOTPGroup>
+                                                </InputOTP>
+                                            </FormControl>
+                                            <FormDescription>
+                                                Please enter the code sent to your you.
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {/* Render the countdown timer with an initial value of 300 seconds (5 minutes) */}
+                                <CountdownTimer initialTime={300} onExpire={handleExpire} />
+                            </>
+                        )}
 
-                        {/* Password */}
-                        <FormField 
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <div className="relative">
-                                        <FormControl>
-                                            <Input 
-                                                {...field}
-                                                placeholder="******"
-                                                type={showPassword ? "text" : "password"}
-                                                autoComplete="current-password"
-                                                disabled={isPending}
-                                            />
-                                        </FormControl>
+                        {!showTwoFactor && (
+                            <>
+                                {/* Email */}
+                                <FormField 
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Email</FormLabel>
+                                            <FormControl>
+                                                <Input 
+                                                    {...field}
+                                                    placeholder="Enter your email"
+                                                    type="email"
+                                                    autoComplete="email"
+                                                    disabled={isPending}
+                                                />
+                                            </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
 
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => setShowPassword(prev => !prev)}
-                                            className="absolute inset-y-0 right-0 flex items-center text-gray-400"
-                                        >
-                                            {showPassword ? (
-                                                <EyeOff className="h-4 w-4" />
-                                            ) : (
-                                                <Eye className="h-4 w-4" />
-                                            )}
-                                        </Button>
-                                    </div>
+                                {/* Password */}
+                                <FormField 
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Password</FormLabel>
+                                            <div className="relative">
+                                                <FormControl>
+                                                    <Input 
+                                                        {...field}
+                                                        placeholder="******"
+                                                        type={showPassword ? "text" : "password"}
+                                                        autoComplete="current-password"
+                                                        disabled={isPending}
+                                                    />
+                                                </FormControl>
 
-                                    <Button
-                                        variant="link"
-                                        size="sm"
-                                        asChild
-                                        className="px-0 flex justify-start font-normal"
-                                    >
-                                        <Link href="/auth/reset-password">
-                                            Forgot Password?
-                                        </Link>
-                                    </Button>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => setShowPassword(prev => !prev)}
+                                                    className="absolute inset-y-0 right-0 flex items-center text-gray-400"
+                                                >
+                                                    {showPassword ? (
+                                                        <EyeOff className="h-4 w-4" />
+                                                    ) : (
+                                                        <Eye className="h-4 w-4" />
+                                                    )}
+                                                </Button>
+                                            </div>
+
+                                            <Button
+                                                variant="link"
+                                                size="sm"
+                                                asChild
+                                                className="px-0 flex justify-start font-normal"
+                                            >
+                                                <Link href="/auth/reset-password">
+                                                    Forgot Password?
+                                                </Link>
+                                            </Button>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
+                            </>
+                        )}
                     </div>
 
                     <FormError message={error || urlError}/>
                     <FormSuccess message={success}/>
 
-                    {/* Submit Button */}
                     <Button
                         type="submit"
                         className="w-full buttons"
@@ -155,10 +228,10 @@ export const LoginForm = () => {
                         {isPending ? (
                             <div className="flex items-center justify-center gap-2">
                                 <span className="h-4 w-4 border-2 border-t-transparent border-solid rounded-full animate-spin" />
-                                <span>Logging in</span>
+                                <span>{showTwoFactor ? "Confirming" : "Logging in"}</span>
                             </div>
                         ) : (
-                            "Login"
+                            showTwoFactor ? "Confirm" : "Login"
                         )}
                     </Button>
                 </form>
