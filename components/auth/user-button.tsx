@@ -14,7 +14,7 @@ export const UserButton = () => {
         <div className="flex items-center gap-x-2">
             <DropdownMenu>
                 <DropdownMenuTrigger>
-                    <Avatar>
+                    <Avatar className="buttons">
                         <AvatarImage src={user?.image || ""}/>
                         <AvatarFallback className="bg-sky-500 text-white">
                             <FaUser/>
