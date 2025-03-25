@@ -89,8 +89,6 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
             await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
 
-            console.log({"See Token Here: ": twoFactorToken.token});
-
             return { twoFactor: true };
         }
     }

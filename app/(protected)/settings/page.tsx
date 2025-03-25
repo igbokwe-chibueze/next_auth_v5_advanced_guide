@@ -1,22 +1,21 @@
-import {auth, signOut} from "@/auth";
+"use client"
 
-const page = async () => {
-    const session = await auth();
+import { logout } from "@/actions/logout";
+
+const SettingsPage = () => {
+    const onClick = () => {
+        logout();
+    }
+    
   return (
     <div>
-        {JSON.stringify(session)}
-
-        <form action={async() => {
-            "use server";
-            await signOut();
-            //TODO : WHEN i signOut it redirects to login Page but the url remains at /settings
-        }}>
-            <button type="submit">
+        <div className = "bg-white p-4 rounded-lg shadow-md">
+            <button type="submit" onClick={onClick}>
                 Logout
             </button>
-        </form>
+        </div>
     </div>
   )
 }
 
-export default page
+export default SettingsPage
