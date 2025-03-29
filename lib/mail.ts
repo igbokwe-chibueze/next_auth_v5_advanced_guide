@@ -62,6 +62,20 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
 
 /**
+ * Sends a password change confirmation email to the user.
+ */
+export const sendPasswordChangeConfirmationEmail = async (email: string) => {
+    const loginLink = `${process.env.NEXT_PUBLIC_APP_URL}/auth/login`;
+    await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: email,
+        subject: "Your password has been changed",
+        html: `<p>Your password has been successfully changed. Please <a href="${loginLink}">log in</a> again. If you did not perform this change, please contact support immediately.</p>`,
+    });
+};
+
+
+/**
  * Sends a two-factor authentication token email.
  *
  * This function sends a simple email containing the two-factor authentication token,

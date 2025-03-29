@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { CardWrapper } from "@/components/auth/card-wrapper";
 import {
@@ -25,6 +25,8 @@ import { newPassword } from "@/actions/new-password";
 import { Eye, EyeOff } from "lucide-react";
 
 export const NewPasswordForm = () => {
+    const router = useRouter();
+
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
@@ -50,15 +52,19 @@ export const NewPasswordForm = () => {
         }
 
         startTransition(() => {
-        newPassword(values, token)
-            .then((res) => {
-            setSuccess(res.success);
-            setError(res.error);
-            })
-            .catch((err) => {
-            setError(err.message);
+            newPassword(values, token)
+                .then((res) => {
+                    if (res.success) {
+                        setSuccess(res.success);
+                        router.push('/auth/login'); // Redirect to login page
+                    } else {
+                        setError(res.error);
+                    }
+                })
+                .catch((err) => {
+                    setError(err.message);
+                });
             });
-        });
     };
 
     return (
@@ -160,4 +166,3 @@ export const NewPasswordForm = () => {
         </CardWrapper>
     )
 };
-    

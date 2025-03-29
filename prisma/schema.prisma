@@ -25,6 +25,7 @@ model User {
   emailVerified         DateTime?
   image                 String?
   password              String?
+  passwordChangedAt     DateTime? // To track password changes
   role                  UserRole               @default(USER)
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?

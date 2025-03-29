@@ -6,6 +6,7 @@ import { getPasswordResetTokenByToken } from "@/data/reset-password-token";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { getUserByEmail } from "@/data/user";
+import { sendPasswordChangeConfirmationEmail } from "@/lib/mail";
 
 export const newPassword = async (values: z.infer<typeof NewPasswordSchema>, token: string) => {
     const validatedFields = NewPasswordSchema.safeParse(values);
@@ -58,5 +59,7 @@ export const newPassword = async (values: z.infer<typeof NewPasswordSchema>, tok
         },
     });
 
-    return { success: "Password updated!" };
+    await sendPasswordChangeConfirmationEmail(existingUser.email);
+
+    return { success: "Password updated! Return to login" };
 };

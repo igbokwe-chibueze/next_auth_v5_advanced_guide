@@ -21,6 +21,7 @@ import { FormSuccess } from "@/components/form-success"
 import { FormError } from "@/components/form-error"
 import { Eye, EyeOff } from "lucide-react"
 import { UserRole } from "@prisma/client"
+import { logout } from "@/actions/logout"
 
 const SettingsPage = () => {
     const user = useCurrentUser();
@@ -54,10 +55,19 @@ const SettingsPage = () => {
                         setError(res.error);
                     }
 
-                    if (res.success) {
+                    if (res.success && res.passwordChanged) {
+                        update();
+                        setSuccess(res.success);
+                        logout()
+                    } else if (res.success) {
                         update();
                         setSuccess(res.success);
                     }
+
+                    // if (res.success) {
+                    //     update();
+                    //     setSuccess(res.success);
+                    // }
                 })
                 .catch(() => setError("Something Went Wrong !"));
         });

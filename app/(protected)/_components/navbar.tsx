@@ -1,10 +1,8 @@
+//app/(protected)/_components/navbar.tsx
 "use client";
 
 import { UserButton } from "@/components/auth/user-button";
-//import { useCurrentUser } from "@/hooks/use-current-user";
-//import { UserAvatar } from "@/components/user-avatar";
 import { Button } from "@/components/ui/button";
-//import { logout } from "@/actions/logout";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
