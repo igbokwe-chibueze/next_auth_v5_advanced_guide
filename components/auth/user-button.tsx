@@ -13,13 +13,17 @@ export const UserButton = () => {
     return (
         <div className="flex items-center gap-x-2">
             <DropdownMenu>
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger className="flex items-center gap-x-2">
                     <Avatar className="buttons">
                         <AvatarImage src={user?.image || ""}/>
                         <AvatarFallback className="bg-sky-500 text-white">
                             <FaUser/>
                         </AvatarFallback>
                     </Avatar>
+
+                    <div className=" text-sm font-medium text-gray-800 ">
+                        {user?.name || "Guest"}
+                    </div>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent className="w-40" align="end">

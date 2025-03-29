@@ -7,6 +7,9 @@ import { Resend } from "resend";
 // This key should be securely set (e.g., in .env.local) and prefixed with NEXT_PUBLIC_ if needed.
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const domain = process.env.NEXT_PUBLIC_APP_URL;
+
+
 /**
  * Sends a verification email to a user.
  *
@@ -19,7 +22,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export const sendVerificationEmail = async (email: string, token: string) => {
     // Construct the URL the user should click to verify their email.
     // This currently points to localhost; update to your production URL when deploying.
-    const confirmLink = `http://localhost:3000/auth/new-verification?token=${token}`;
+    const confirmLink = `${domain}/auth/new-verification?token=${token}`;
 
     // Send the verification email using Resend's email sending service.
     await resend.emails.send({

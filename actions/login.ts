@@ -13,7 +13,7 @@ import { prisma } from "@/lib/prisma";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 
-export const login = async (values: z.infer<typeof LoginSchema>) => {
+export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: string | null) => {
     const validatedFields = LoginSchema.safeParse(values);
 
     if (!validatedFields.success) {
@@ -98,7 +98,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         await signIn("credentials", { 
             email, 
             password, 
-            redirectTo: DEFAULT_LOGIN_REDIRECT_URL 
+            redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT_URL,
         });
     } catch (error) {
         if (error instanceof AuthError) {

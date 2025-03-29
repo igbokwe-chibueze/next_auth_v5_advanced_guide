@@ -25,7 +25,9 @@ export default function Home() {
           A simple authentication service.
         </p>
         <div>
-          <LoginButton>
+          {/* If you want the signIn button to open up the signup form as model instead of redirecting to the signIn page
+          then do this instead <LoginButton mode="modal" asChild> */}
+          <LoginButton asChild>
             <Button variant={"secondary"} size={"lg"} className="buttons">
               Sign In
             </Button>
