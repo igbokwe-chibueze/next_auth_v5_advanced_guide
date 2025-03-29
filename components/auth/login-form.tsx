@@ -74,7 +74,9 @@ export const LoginForm = () => {
                         setSuccess(res.success);
                     }
 
+                    // If the response indicates that two-factor is required:
                     if (res?.twoFactor) {
+                        // Enable two-factor authentication view.
                         setShowTwoFactor(true);
                     }
                 })
@@ -90,7 +92,7 @@ export const LoginForm = () => {
 
     // Function to call when the timer expires
     const handleExpire = () => {
-        // Mimic the logic when the token has expired
+        // Mimic what happens when the token code expires
         setShowTwoFactor(false);
         form.reset(); // reset the fields
         setError("Code has expired!");

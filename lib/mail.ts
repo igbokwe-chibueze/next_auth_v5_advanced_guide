@@ -7,6 +7,8 @@ import { Resend } from "resend";
 // This key should be securely set (e.g., in .env.local) and prefixed with NEXT_PUBLIC_ if needed.
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Retrieve the application domain from environment variables.
+// This should be set to your production URL (or localhost during development).
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 
 
@@ -20,8 +22,8 @@ const domain = process.env.NEXT_PUBLIC_APP_URL;
  * @param token - The unique token used to verify the email address.
  */
 export const sendVerificationEmail = async (email: string, token: string) => {
-    // Construct the URL the user should click to verify their email.
-    // This currently points to localhost; update to your production URL when deploying.
+    // Construct the confirmation link using the domain and token.
+    // Note: The URL will change based on your environment (production vs. development).
     const confirmLink = `${domain}/auth/new-verification?token=${token}`;
 
     // Send the verification email using Resend's email sending service.
@@ -46,7 +48,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
  */
 export const sendPasswordResetEmail = async (email: string, token: string) => {
     // Construct the URL for password reset.
-    const resetLink = `http://localhost:3000/auth/new-password?token=${token}`;
+    const resetLink = `${domain}/auth/new-password?token=${token}`;
 
     // Use Resend to dispatch the password reset email.
     await resend.emails.send({

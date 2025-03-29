@@ -8,14 +8,18 @@ import { useSearchParams } from "next/navigation";
 
 const Socials = () => {
     const searchParams = useSearchParams();
+
+    // Get the callbackUrl parameter from the URL; if not set, the default redirect URL will be used.
     const callbackUrl = searchParams.get("callbackUrl");
     
     const onClick = (provider: "google" | "github") => {
+        // Call signIn with the chosen provider and set the callback URL.
         signIn(provider, {
             callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT_URL
         });
     }
     
+    // Render two buttons side by side for Google and GitHub sign-in.
     return (
         <div className="flex items-center w-full gap-x-2">
             <Button size={"lg"} variant={"outline"} 
