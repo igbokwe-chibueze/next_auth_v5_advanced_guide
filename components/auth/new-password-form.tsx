@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import { CardWrapper } from "@/components/auth/card-wrapper";
 import {
@@ -23,9 +23,9 @@ import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { newPassword } from "@/actions/new-password";
 import { Eye, EyeOff } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 export const NewPasswordForm = () => {
-    const router = useRouter();
 
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | undefined>("");
@@ -56,7 +56,11 @@ export const NewPasswordForm = () => {
                 .then((res) => {
                     if (res.success) {
                         setSuccess(res.success);
-                        router.push('/auth/login'); // Redirect to login page
+                        const message = "Password changed successfully. Please log in with your new password.";
+                        const encodedMessage = encodeURIComponent(message);
+                        signOut({
+                            callbackUrl: `/auth/login?message=${encodedMessage}`
+                        });
                     } else {
                         setError(res.error);
                     }

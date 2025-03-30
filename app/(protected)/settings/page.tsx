@@ -2,7 +2,7 @@
 
 import * as z from "zod"
 import { useState, useTransition } from "react"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
@@ -21,7 +21,6 @@ import { FormSuccess } from "@/components/form-success"
 import { FormError } from "@/components/form-error"
 import { Eye, EyeOff } from "lucide-react"
 import { UserRole } from "@prisma/client"
-import { logout } from "@/actions/logout"
 
 const SettingsPage = () => {
     const user = useCurrentUser();
@@ -58,16 +57,16 @@ const SettingsPage = () => {
                     if (res.success && res.passwordChanged) {
                         update();
                         setSuccess(res.success);
-                        logout()
+                        // Use signOut with a callbackUrl that includes your flash message
+                        signOut({
+                            callbackUrl: `/auth/login?message=${encodeURIComponent(
+                                "Password changed successfully. Please log in with your new password."
+                            )}`
+                        });
                     } else if (res.success) {
                         update();
                         setSuccess(res.success);
                     }
-
-                    // if (res.success) {
-                    //     update();
-                    //     setSuccess(res.success);
-                    // }
                 })
                 .catch(() => setError("Something Went Wrong !"));
         });

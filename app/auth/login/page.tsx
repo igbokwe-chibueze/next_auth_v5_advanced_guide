@@ -1,9 +1,21 @@
-import { LoginForm } from "@/components/auth/login-form";
+// app/auth/login/page.tsx
 
-const LoginPage = () => {
+import { LoginForm } from "@/components/auth/login-form";
+import ClientToast from "@/components/client-toast";
+
+type LoginPageProps = {
+  searchParams: Promise<{
+    message?: string | string[];
+  }>;
+};
+
+const LoginPage = async ({ searchParams }: LoginPageProps) => {
+  const resolvedSearchParams = await searchParams;
+  const message = resolvedSearchParams.message;
   return (
-    <div className="">
-      <LoginForm/>
+    <div>
+      {message && <ClientToast message={message} />}
+      <LoginForm />
     </div>
   );
 };
