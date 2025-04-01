@@ -108,7 +108,7 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
         },
         data: {
             ...values, // Spread the processed values into the update data.
-            //...(passwordChanged ? { passwordChangedAt: new Date() } : {}),
+            ...(passwordChanged ? { passwordChangedAt: new Date() } : {}), // Update passwordChangedAt if password was changed
         },
     });
 

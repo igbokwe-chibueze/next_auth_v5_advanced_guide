@@ -14,6 +14,7 @@ declare module "next-auth" {
         isTwoFactorEnabled?: boolean;
         isOAuth?: boolean;
       } & DefaultSession["user"]
+      hasPasswordChanged?: boolean;
     }
 }
 
@@ -78,16 +79,31 @@ export const {
                 session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
             }
 
+            // Propagate the custom property to the session
+            session.hasPasswordChanged = token.hasPasswordChanged as boolean;
+
             return session
         },
         async jwt({ token }) {
             if (!token.sub) return token;
 
             const existingUser = await getUserById(token.sub);
-            
 
             if (!existingUser) return token;
 
+            // Global sign-out check: Compare token's issued time (iat) with passwordChangedAt.
+            // Note: token.iat is in seconds; convert it to milliseconds.
+            if (existingUser.passwordChangedAt && token.iat) {
+                const tokenIssuedAt = token.iat * 1000; // Convert to milliseconds
+                const passwordChangedAt = new Date(existingUser.passwordChangedAt).getTime();
+                
+                if (tokenIssuedAt < passwordChangedAt) {
+                    // Mark token as invalid
+                    token.hasPasswordChanged = true;
+                }
+            }
+
+            // Populate additional token fields
             const existingAccount = await getAccountByUserId(existingUser.id);
             
             token.isOAuth = !!existingAccount;

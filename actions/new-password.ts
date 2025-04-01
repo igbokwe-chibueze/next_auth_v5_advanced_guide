@@ -50,6 +50,7 @@ export const newPassword = async (values: z.infer<typeof NewPasswordSchema>, tok
         },
         data: {
             password: hashedPassword,
+            passwordChangedAt: new Date(), // Update passwordChangedAt here
         },
     });
 

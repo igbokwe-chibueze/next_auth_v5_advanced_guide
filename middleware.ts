@@ -1,3 +1,5 @@
+//middleware.ts
+
 import NextAuth from "next-auth";
 // Import the authentication configuration.
 import { authConfig } from "@/auth.config";
@@ -11,6 +13,7 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   // Destructure nextUrl from the request; it contains URL information.
   const { nextUrl } = req;
+
   // Determine if the user is logged in. req.auth is set after NextAuth processes the request.
   const isLoggedIn = !!req.auth;
 
