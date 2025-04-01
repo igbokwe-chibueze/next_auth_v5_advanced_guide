@@ -6,6 +6,7 @@ import { LogoutButton } from "./logout-button";
 import { FaUser } from "react-icons/fa";
 import { SidebarCloseIcon } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { GlobalLogoutButton } from "./global-logout-button";
 
 export const UserButton = () => {
     const user = useCurrentUser();    
@@ -33,6 +34,13 @@ export const UserButton = () => {
                             Logout
                         </DropdownMenuItem>
                     </LogoutButton>
+
+                    <GlobalLogoutButton>
+                        <DropdownMenuItem>
+                            <SidebarCloseIcon className=" h-4 w-4 mr-2 text-gray-800"/>
+                            Global-Logout
+                        </DropdownMenuItem>
+                    </GlobalLogoutButton>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
